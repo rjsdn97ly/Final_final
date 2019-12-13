@@ -85,24 +85,6 @@
                         revert: true
                     });
                 }
-                for (var j in card[i]) {
-                    j = Math.floor(Math.random() * card[i].length);
-                    $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#card').draggable({
-                        containment: '#main',
-                        stack: '#card div',
-                        cursor: 'normal',
-                        revert: true
-                    });
-                }
-                for (var j in card[i]) {
-                    j = Math.floor(Math.random() * card[i].length);
-                    $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#card').draggable({
-                        containment: '#main',
-                        stack: '#card div',
-                        cursor: 'normal',
-                        revert: true
-                    });
-                }
             }
         }
 
