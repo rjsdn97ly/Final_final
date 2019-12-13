@@ -36,21 +36,28 @@
         }
 
         #main {
-            margin: 80px 70px;
             text-align: center;
             vertical-align: middle;
             user-select: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
-    
+
         #box,
         #card {
             width: 800px;
-            height: 120px;
             padding: 20px;
             border: 0px solid #333;
             border-radius: 5px;
             box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
             margin: 10px;
+            position: relative;
+        }
+
+        #box {
+            height: 120px;
         }
 
         #Q {
@@ -75,7 +82,6 @@
 
         function caca() {
             for (var i in card) {
-                var index[] += i;
                 for (var j in card[i]) {
                     j = Math.floor(Math.random() * card[i].length);
                     $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#card').draggable({
@@ -99,21 +105,15 @@
         }
 
         function slot() {
-            var a = 0;
-            var arr = [];
             for (var l in card) {
                 $('#Q').detach();
             }
             for (var i in card) {
-                arr[a] = i;
-                RandomArr(arr);
                 $(`<div id='Q'>${i}</div>`).data('key', i).appendTo('#box').droppable({
                     accept: 'div',
                     hoverClass: 'hovered',
                     drop: dropEvent
                 });
-                console.log(i);
-                a++;
             }
         }
 
@@ -138,8 +138,37 @@
             caca();
 
             slot();
-            
-        });
+            $('#card').css({
+                height: $('.item').height() * (parseInt($('.item').length / 9) + 1) + 20
+            })
+            let k = -1;
+            let shuffle = setInterval(function() {
+                $('.item').css({
+                    position: 'absolute'
+                })
+                for (let i = 0; i < 27; i++) {
+                    k *= -1;
+                    $('.item').eq(i).css({
+                        zIndex: k
+                    })
+                    $('.item').eq(i).animate({
+                        top: Math.random() * 200,
+                        left: Math.random() * 600
+                    }, function() {
+                        $('.item').eq(i).animate({
+                            top: Math.random() * 200,
+                            left: Math.random() * 600
+                        })
+                    });
+                }
+            }, 500);
+
+            setTimeout(function() {
+                clearInterval(shuffle)
+                alert(s)
+            }, 5000)
+
+        })
 
     </script>
 
@@ -159,7 +188,13 @@
         <div id='card'></div>
 
     </div>
+    <select name="time" id="sel">
+        <option value="2000">easy</option>
+        <option value="4000">normal</option>
+        <option value="6000">medieam</option>
+        <option value="8000">hard</option>
 
+    </select>
 </body>
 
 </html>
