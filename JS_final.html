@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <script src="jquery-3.4.1.js" charset="utf-8"></script>
+    <script src="jquery-ui-git.js" charset="utf-8"></script>
+
+    <style>
+        .item {
+            width: 80px;
+            height: 120px;
+            float: left;
+            border: 1px solid black;
+            border-radius: 5px;
+            cursor: normal;
+            position: relative;
+            top: 0;
+            left: 0;
+            margin: 2px;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+            background: white;
+        }
+
+        #box>div {
+            width: 80px;
+            height: 120px;
+            float: left;
+            border: 1px solid black;
+            cursor: normal;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        #main {
+            margin: 80px 70px;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+        }
+    
+        #box,
+        #card {
+            width: 800px;
+            height: 120px;
+            padding: 20px;
+            border: 0px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+            margin: 10px;
+        }
+
+        #Q {
+            margin: 2px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+            background: white;
+        }
+
+    </style>
+
+    <script>
+        var myScore = 0;
+        var combo = 0;
+
+        let card = {
+            "숫자": ["1", "둘", "삼", "4", "5", "여섯", "일곱", "팔", "아홉"],
+            "새": ["저어새", "까마귀", "갈매기", "화질구지", "직박구리", "따오기"],
+            "물고기": ["송어", "고등어", "연어", "청새치", "청어", "삼치", "대방어", "우럭"]
+        }
+
+        function caca() {
+            for (var i in card) {
+                var index[] += i;
+                for (var j in card[i]) {
+                    j = Math.floor(Math.random() * card[i].length);
+                    $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#card').draggable({
+                        containment: '#main',
+                        stack: '#card div',
+                        cursor: 'normal',
+                        revert: true
+                    });
+                }
+                for (var j in card[i]) {
+                    j = Math.floor(Math.random() * card[i].length);
+                    $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#card').draggable({
+                        containment: '#main',
+                        stack: '#card div',
+                        cursor: 'normal',
+                        revert: true
+                    });
+                }
+                for (var j in card[i]) {
+                    j = Math.floor(Math.random() * card[i].length);
+                    $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#card').draggable({
+                        containment: '#main',
+                        stack: '#card div',
+                        cursor: 'normal',
+                        revert: true
+                    });
+                }
+            }
+        }
+
+        function RandomArr(d) {
+            for (var c = d.length - 1; c >= 0; c--) {
+                var b = Math.floor(Math.random() * (c + 1));
+                var a = d[c];
+                d[c] = d[b];
+                d[b] = a;
+            }
+            return d
+        }
+
+        function slot() {
+            var a = 0;
+            var arr = [];
+            for (var l in card) {
+                $('#Q').detach();
+            }
+            for (var i in card) {
+                arr[a] = i;
+                RandomArr(arr);
+                $(`<div id='Q'>${i}</div>`).data('key', i).appendTo('#box').droppable({
+                    accept: 'div',
+                    hoverClass: 'hovered',
+                    drop: dropEvent
+                });
+                console.log(i);
+                a++;
+            }
+        }
+
+        function dropEvent(event, ui) {
+
+            var slotkey = $(this).data('key');
+            var cardkey = ui.draggable.data('key');
+
+            if (slotkey == cardkey) {
+                ui.draggable.fadeOut(200);
+                console.log("success");
+                myScore = myScore + 1 + combo;
+                $('p').html("SCORE: " + myScore);
+                combo++;
+            } else {
+                combo = 0;
+            }
+        }
+
+        $(document).ready(function() {
+
+            caca();
+
+            slot();
+            
+        });
+
+    </script>
+
+</head>
+
+<body>
+
+    <div id='main'>
+
+        <p>SCORE: 0</p>
+
+        <div id='box'></div>
+        <div id='box1'></div>
+        <div id='box2'></div>
+
+
+        <div id='card'></div>
+
+    </div>
+
+</body>
+
+</html>
