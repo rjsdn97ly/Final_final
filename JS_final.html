@@ -60,7 +60,7 @@
             height: 120px;
         }
 
-        #Q {
+        .Q {
             margin: 2px;
             border: 1px solid black;
             border-radius: 5px;
@@ -72,7 +72,7 @@
 
     <script>
         var myScore = 0;
-        var combo = 0;
+        var combo = 1;
 
         let card = {
             "숫자": ["1", "둘", "삼", "4", "5", "여섯", "일곱", "팔", "아홉"],
@@ -94,22 +94,22 @@
             }
         }
 
-        function RandomArr(d) {
-            for (var c = d.length - 1; c >= 0; c--) {
-                var b = Math.floor(Math.random() * (c + 1));
-                var a = d[c];
-                d[c] = d[b];
-                d[b] = a;
-            }
-            return d
-        }
+//        function RandomArr(d) {
+//            for (var c = d.length - 1; c >= 0; c--) {
+//                var b = Math.floor(Math.random() * (c + 1));
+//                var a = d[c];
+//                d[c] = d[b];
+//                d[b] = a;
+//            }
+//            return d
+//        }
 
         function slot() {
             for (var l in card) {
-                $('#Q').detach();
+                $('.Q').detach();
             }
             for (var i in card) {
-                $(`<div id='Q'>${i}</div>`).data('key', i).appendTo('#box').droppable({
+                $(`<div class='Q'>${i}</div>`).data('key', i).appendTo('#box').droppable({
                     accept: 'div',
                     hoverClass: 'hovered',
                     drop: dropEvent
@@ -125,11 +125,13 @@
             if (slotkey == cardkey) {
                 ui.draggable.fadeOut(200);
                 console.log("success");
-                myScore = myScore + 1 + combo;
-                $('p').html("SCORE: " + myScore);
+                myScore = myScore + combo;
+                $('#score').html("SCORE: " + myScore);
                 combo++;
+                $('#combo').html("COMBO: " + combo); 
             } else {
                 combo = 0;
+                $('#combo').html("COMBO: " + combo);
             }
         }
 
@@ -138,35 +140,39 @@
             caca();
 
             slot();
+            
             $('#card').css({
                 height: $('.item').height() * (parseInt($('.item').length / 9) + 1) + 20
             })
-            let k = -1;
-            let shuffle = setInterval(function() {
-                $('.item').css({
-                    position: 'absolute'
-                })
-                for (let i = 0; i < 27; i++) {
-                    k *= -1;
-                    $('.item').eq(i).css({
-                        zIndex: k
-                    })
-                    $('.item').eq(i).animate({
-                        top: Math.random() * 200,
-                        left: Math.random() * 600
-                    }, function() {
-                        $('.item').eq(i).animate({
-                            top: Math.random() * 200,
-                            left: Math.random() * 600
-                        })
-                    });
-                }
-            }, 500);
-
-            setTimeout(function() {
-                clearInterval(shuffle)
-                alert(s)
-            }, 5000)
+            
+//-------------------- JUCHAN's HAND ----------------------
+//            let k = -1;
+//            let shuffle = setInterval(function() {
+//                $('.item').css({
+//                    position: 'absolute'
+//                })
+//                for (let i = 0; i < 27; i++) {
+//                    k *= -1;
+//                    $('.item').eq(i).css({
+//                        zIndex: k
+//                    })
+//                    $('.item').eq(i).animate({
+//                        top: Math.random() * 200,
+//                        left: Math.random() * 600
+//                    }, function() {
+//                        $('.item').eq(i).animate({
+//                            top: Math.random() * 200,
+//                            left: Math.random() * 600
+//                        })
+//                    });
+//                }
+//            }, 500);
+//
+//            setTimeout(function() {
+//                clearInterval(shuffle)
+//                alert(s)
+//            }, 500)
+//---------------------------------------------------------            
 
         })
 
@@ -178,23 +184,22 @@
 
     <div id='main'>
 
-        <p>SCORE: 0</p>
+        <p id='score'>SCORE: 0</p>
+        <p id='combo'>COMBO: 0</p>
 
         <div id='box'></div>
-        <div id='box1'></div>
-        <div id='box2'></div>
-
-
+        
         <div id='card'></div>
 
     </div>
+<!--
     <select name="time" id="sel">
         <option value="2000">easy</option>
         <option value="4000">normal</option>
         <option value="6000">medieam</option>
         <option value="8000">hard</option>
-
     </select>
+-->
 </body>
 
 </html>
