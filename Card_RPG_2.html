@@ -134,14 +134,15 @@
 
         #expContainer {
             height: 360.5px;
-            width: 20px;
+            width: 40px;
             margin: 10px;
+            margin-left: 30px;
             border: 1px solid black;
             background-color: #4CAF50;
         }
 
         #exp {
-            height: 100%;
+            height: 0%;
             background-color: white;
         }
 
@@ -151,8 +152,11 @@
         $(start);
 
         let myLife = 10;
-        var exp = 0;
-        var level = 1;
+        let maxLife = 10;
+        let exp = 0;
+        let level = 1;
+        let maxExp = 10;
+        let expNow;
 
         let card = {
             "산": ["지팡이"],
@@ -170,6 +174,7 @@
                 if (Math.random() < 0.65) {
                     item();
                 }
+                getExp();
             } else {
                 $(this).fadeOut(200);
                 ui.draggable.fadeOut(200);
@@ -231,6 +236,27 @@
             $('#life').html("LIFE: " + myLife);
             if (myLife == 0) {
                 gameOver();
+            }
+        }
+
+        function getExp() {
+            exp += Math.floor(Math.random() * 4 + 1);
+            expNow = (exp / maxExp) * 100;
+            $('#exp').animate({
+                height: `${expNow}%`
+            });
+            if (exp >= maxExp) {
+                level += 1;
+                $('#level').html("LEVEL: " + level);
+                exp = 0;
+                expNow = 0;
+                maxExp += 10;
+                maxLife += 2;
+                myLife = maxLife;
+                $('#life').html("LIFE: " + myLife);
+                $('#exp').animate({
+                    height: `${expNow}%`
+                });
             }
         }
 
