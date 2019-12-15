@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>C-RPG</title>
+
+    <script src="jquery-3.4.1.js" charset="utf-8"></script>
+    <script src="jquery-ui-git.js" charset="utf-8"></script>
+
+    <style>
+        body {
+            background-color: coral;
+        }
+
+        #main {
+            background-color: white;
+            width: auto;
+            height: auto;
+            border: 1px solid black;
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+        }
+
+        #inven {
+            position: relative;
+            float: left;
+            width: 100px;
+            height: 500px;
+            border: 1px solid black;
+            border-radius: 2px;
+            margin: 5px;
+            text-align: center;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+        }
+
+        #game {
+            position: relative;
+            float: left;
+            width: 300px;
+            height: 500px;
+            border: 1px solid black;
+            border-radius: 2px;
+            margin: 5px;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+        }
+
+        #info {
+            position: relative;
+            float: left;
+            width: 100px;
+            height: 500px;
+            border: 1px solid black;
+            border-radius: 2px;
+            margin: 5px;
+            text-align: center;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+        }
+
+        .Q {
+            position: relative;
+            float: left;
+            width: 54px;
+            height: 50px;
+            margin: 2px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+            background: #effff8;
+            text-align: center;
+            vertical-align: 50%;
+            z-index: 1;
+        }
+
+        .item {
+            margin: 2px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 .1em rgba(0, 0, 0, .8);
+            background: #efffff;
+            text-align: center;
+            z-index: 99;
+        }
+
+        #GC {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        #PA {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        #successMessage {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            z-index: 100;
+            background: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
+            text-align: center;
+        }
+
+    </style>
+
+    <script>
+        $(start);
+
+        let myLife = 10;
+        var exp = 0;
+        var level = 1;
+
+        let card = {
+            "산": ["지팡이"],
+            "강": ["나무"],
+            "사막": ["물"],
+            "절벽": ["밧줄"]
+        }
+
+        function dropEvent(event, ui) {
+            var thingkey = $(this).data('key');
+            var itemkey = ui.draggable.data('key');
+            if (thingkey == itemkey) {
+                $(this).fadeOut(200);
+                ui.draggable.fadeOut(200);
+                if (Math.random() < 0.65) {
+                    item();
+                }
+            } else {
+                $(this).fadeOut(200);
+                ui.draggable.fadeOut(200);
+                myLife -= 1;
+                $('#life').html("LIFE: " + myLife);
+                if (myLife == 0) {
+                    gameOver();
+                }
+            }
+        }
+
+        function thing() {
+            for (var i in card) {
+                i = Object.keys(card)[Math.floor(Math.random() * Object.keys(card).length)];
+                console.log(i);
+                $(`<div class='Q'>${i}</div>`).data('key', i).prependTo('#game').droppable({
+                    accept: 'div',
+                    hoverClass: 'hovered',
+                    drop: dropEvent
+                });
+                break;
+            }
+        }
+
+        function item() {
+            for (var i in card) {
+                for (var j in card[i]) {
+                    i = Object.keys(card)[Math.floor(Math.random() * Object.keys(card).length)];
+                    for (var j in card[i]) {
+                        $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#inven').draggable({
+                            containment: '#main',
+                            stack: '#card div',
+                            cursor: 'normal',
+                            revert: true
+                        });
+                    }
+
+                }
+                break;
+            }
+        }
+
+        function gameOver() {
+            $('#successMessage').show();
+            $('#successMessage').animate({
+                left: '50 %',
+                top: '50 %',
+                transform: 'translate(-50 % , -50 % )',
+                width: '400px',
+                height: '100px',
+                opacity: 1
+            });
+            clearInterval(time)
+        }
+
+        function getCard() {
+            item();
+            myLife -= 1;
+            $('#life').html("LIFE: " + myLife);
+            if (myLife == 0) {
+                gameOver();
+            }
+        }
+
+        var time;
+
+        function start() {
+
+            $('.item').detach();
+            $('.Q').detach();
+            myLife = 10;
+            $('#life').html("LIFE: " + myLife);
+            $('#level').html("LEVEL: " + level);
+            $('#successMessage').hide();
+            
+            
+            item();
+
+            time = setInterval(thing, 3000);
+            
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <div id='main'>
+
+        <div id='inven'>
+            <p>INVENTORY</p>
+            <button id='GC' onclick="getCard()">GET CARD</button>
+        </div>
+
+        <div id='game'>
+
+        </div>
+
+        <div id='info'>
+            <p>RECORD</p>
+            <p id='life'></p>
+            <p id='level'></p>
+        </div>
+
+    </div>
+
+    <div id="successMessage">
+        <h2>Finally, Death finds you...</h2>
+        <button id='PA' onclick="start()">Play Again</button>
+    </div>
+
+</body>
+
+</html>
