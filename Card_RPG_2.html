@@ -77,11 +77,13 @@
             text-align: center;
             vertical-align: 50%;
             z-index: 1;
+            margin-top: 20px;
+            padding-top: 20px;
         }
 
         .item {
-            width: 46px;
-            height: 46px;
+            width: 96px;
+            height: 30px;
             position: relative;
             float: left;
             margin: 1px;
@@ -91,6 +93,9 @@
             background: #efffff;
             text-align: center;
             z-index: 99;
+            padding-top: 5px;
+            background: black;
+            color: white;
         }
 
         #GC {
@@ -111,12 +116,11 @@
             color: white;
             padding: 5px 5px;
             text-align: center;
-            text-decoration: none;
             display: inline-block;
             font-size: 16px;
         }
 
-        #successMessage {
+        #Message {
             position: absolute;
             left: 50%;
             top: 50%;
@@ -149,7 +153,6 @@
     </style>
 
     <script>
-        
         $(start);
 
         var time;
@@ -161,10 +164,11 @@
         let expNow;
 
         let card = {
-            "산": ["지팡이"],
-            "강": ["나무"],
-            "사막": ["물"],
-            "절벽": ["밧줄"]
+            "산": ["지팡이", "등산화"],
+            "강": ["뗏목", "수영"],
+            "사막": ["물병", "낙타"],
+            "절벽": ["밧줄", "헬리콥터"],
+            "비": ["우산", "우비"]
         }
 
         function dropEvent(event, ui) {
@@ -176,6 +180,7 @@
                 if (Math.random() < 0.65) {
                     item();
                 }
+                $(this).remove();
                 getExp();
             } else {
                 $(this).fadeOut(200);
@@ -197,31 +202,36 @@
                     hoverClass: 'hovered',
                     drop: dropEvent
                 });
+                console.log($('.Q').length);
+                if ($('.Q').length == 25) {
+                    gameOver();
+                }
                 break;
             }
         }
 
         function item() {
-            for (var i in card) {
+            item: for (var i in card) {
                 for (var j in card[i]) {
                     i = Object.keys(card)[Math.floor(Math.random() * Object.keys(card).length)];
                     for (var j in card[i]) {
+                        j = Math.floor(Math.random() * card[i].length);
                         $(`<div class='item'>${card[i][j]}</div>`).data('key', i).appendTo('#inven').draggable({
                             containment: '#main',
                             stack: '#card div',
                             cursor: 'normal',
                             revert: true
                         });
+                        console.log($('.item').length);
+                        break item;
                     }
-
                 }
-                break;
             }
         }
 
         function gameOver() {
-            $('#successMessage').show();
-            $('#successMessage').animate({
+            $('#Message').show();
+            $('#Message').animate({
                 left: '50 %',
                 top: '50 %',
                 transform: 'translate(-50 % , -50 % )',
@@ -269,11 +279,15 @@
             myLife = 10;
             $('#life').html("LIFE: " + myLife);
             $('#level').html("LEVEL: " + level);
-            $('#successMessage').hide();
+            $('#Message').hide();
+            $('#Message').animate({
+                width: 0,
+                height: 0
+            });
 
-
-            item();
-
+            for (let i = 0; i < 4; i++) {
+                item();
+            }
             time = setInterval(thing, 3000);
         }
 
@@ -305,7 +319,7 @@
 
     </div>
 
-    <div id="successMessage">
+    <div id="Message">
         <h2>Finally, Death finds you...</h2>
         <button id='PA' onclick="start()">Play Again</button>
     </div>
