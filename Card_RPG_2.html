@@ -66,9 +66,9 @@
 
         .Q {
             position: relative;
-            float: top;
+            float: left;
             width: 94px;
-            height: 50px;
+            height: 90px;
             margin: 2px;
             border: 1px solid black;
             border-radius: 5px;
@@ -190,7 +190,6 @@
             if (thingkey == itemkey) {
                 $(this).fadeOut(200);
                 ui.draggable.fadeOut(200);
-                
                 if (Math.random() < 0.65) {
                     item();
                 }
@@ -216,10 +215,10 @@
                     hoverClass: 'hovered',
                     drop: dropEvent
                 }).stop().animate({
-                    height: 50
+                    height: 90
                 });
                 console.log($('.Q').length);
-                if ($('.Q').length == 15) {
+                if ($('.Q').length >= 15) {
                     gameOver();
                 }
                 break;
