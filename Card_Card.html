@@ -149,7 +149,7 @@
 
             for (let i in card) {
 
-                i = Object.keys(card)[Math.floor(Math.random() * Object.keys(card).length)];
+//                i = Object.keys(card)[Math.floor(Math.random() * Object.keys(card).length)];
 
                 $(`<div class='slot'>${i}</div>`).data('key', i).appendTo('#cardSlot').droppable({
                     accept: 'div',
